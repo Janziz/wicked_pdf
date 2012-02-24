@@ -20,12 +20,12 @@ class WickedPdf
     @exe_path ||= WickedPdf.config[:exe_path] unless WickedPdf.config.empty?
     @exe_path ||= (defined?(Bundler) ? `bundle exec which wkhtmltopdf` : `which wkhtmltopdf`).chomp
     raise "Location of wkhtmltopdf unknown" if @exe_path.empty?
-    raise "Bad wkhtmltopdf's path" unless File.exists?(@exe_path)
-    raise "Wkhtmltopdf is not executable" unless File.executable?(@exe_path)
+    #raise "Bad wkhtmltopdf's path" unless File.exists?(@exe_path)
+    #raise "Wkhtmltopdf is not executable" unless File.executable?(@exe_path)
   end
 
   def pdf_from_string(string, options={})
-    command = "\"#{@exe_path}\" #{parse_options(options)} #{'-q ' unless on_windows?}- - " # -q for no errors on stdout
+    command = "#{@exe_path} #{parse_options(options)} #{'-q ' unless on_windows?}- - " # -q for no errors on stdout
     print_command(command) if in_development_mode?
     pdf, err = Open3.popen3(command) do |stdin, stdout, stderr|
       stdin.binmode
